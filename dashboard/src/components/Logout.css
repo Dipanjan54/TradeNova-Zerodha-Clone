@@ -1,0 +1,66 @@
+.logout-dropdown-above {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  min-width: 250px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logout-user-info {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.logout-username {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 0 6px 0;
+  color: #333;
+}
+
+.logout-email {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+.logout-option {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+  border-radius: 0 0 8px 8px;
+}
+
+.logout-option:hover {
+  background-color: #f5f5f5;
+  color: #ff5722;
+}
+
+.logout-icon {
+  font-size: 16px;
+}

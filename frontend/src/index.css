@@ -1,0 +1,188 @@
+/* ===========================
+   GLOBAL
+=========================== */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  background: #f9fafb;
+}
+
+.nav-link {
+  margin-left: 40px;
+}
+
+/* ===========================
+   CARD HOVER
+=========================== */
+.card,
+.accordion-item {
+  transition: 0.25s ease;
+}
+
+.card:hover,
+.accordion-item:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
+
+/* ===========================
+   ZERODHA ACCORDION HEADER
+=========================== */
+.accordion-button {
+  background: #f8fafc !important;
+  border: 1px solid #e5e7eb !important;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827 !important;
+  padding: 18px 22px !important;
+  border-radius: 6px !important;
+}
+
+.accordion-button::after {
+  filter: none;
+  color: #2563eb;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important;
+}
+
+/* ===========================
+   LEFT MENU LINKS (NO underline)
+=========================== */
+.accordion-body ul {
+  list-style: disc;
+  padding-left: 50px;
+  margin-top: 20px;
+}
+
+.accordion-body li {
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.accordion-body a {
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.accordion-body a:hover {
+  color: #111827;
+  text-decoration: none;
+}
+
+/* ===========================
+   RIGHT NOTICE BOX (UNDERLINE stays)
+=========================== */
+.notice-box {
+  background: #fff5e6;
+  border-left: 6px solid #ff8c00;
+  padding: 20px 22px;
+  border-radius: 4px;
+}
+
+.notice-box ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.notice-box li {
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+/* Zerodha style: underline stays */
+.notice-box a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: 0.2s;
+}
+
+.notice-box a:hover {
+  color: #111827;
+}
+
+/* ===========================
+   QUICK LINKS
+=========================== */
+.list-group-item {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.list-group-item:hover {
+  color: #2563eb;
+  padding-left: 16px;
+}
+
+/* ===========================
+   ICON SPACING
+=========================== */
+.accordion-button i {
+  margin-right: 14px;
+  min-width: 24px;
+}
+
+/* ===========================
+   KITE DROPDOWN MENU
+=========================== */
+.menu-dropdown-wrapper {
+  position: relative;
+}
+
+.kite-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  padding: 15px;
+  min-width: 150px;
+  z-index: 1000;
+  margin-top: 5px;
+}
+
+.kite-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 15px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.kite-card:hover {
+  background-color: #f5f5f5;
+}
+
+.kite-logo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.kite-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.kite-subtitle {
+  font-size: 11px;
+  color: #666;
+}
+
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
