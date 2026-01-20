@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import "./SellActionWindow.css";
+import API_URL from "../config";
 
 const SellActionWindow = ({ uid, availableQty }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
@@ -39,7 +40,6 @@ const SellActionWindow = ({ uid, availableQty }) => {
       return false;
     }
 
-   
     if (qty > availableQty) {
       return false;
     }
@@ -65,7 +65,7 @@ const SellActionWindow = ({ uid, availableQty }) => {
 
     try {
       await axios.post(
-        "http://localhost:3002/newOrder",
+        `${API_URL}/newOrder`,
         {
           name: uid,
           qty: stockQuantity,

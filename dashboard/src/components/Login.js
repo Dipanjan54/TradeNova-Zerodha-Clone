@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import API_URL from "../config";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +33,7 @@ export default function Login() {
     setValidated(true);
 
     try {
-      const response = await fetch("http://localhost:3002/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +60,9 @@ export default function Login() {
             message: "Account not found. Redirecting to signup...",
           });
           setTimeout(() => {
-            window.location.href = "http://localhost:3001/signup";
+            window.location.href = process.env.REACT_APP_FRONTEND_URL
+              ? `${process.env.REACT_APP_FRONTEND_URL}/signup`
+              : "http://localhost:3001/signup";
           }, 2000);
         } else {
           setFlashMessage({ type: "error", message: data.message });

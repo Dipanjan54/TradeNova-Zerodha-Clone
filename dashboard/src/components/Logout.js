@@ -1,5 +1,6 @@
 import React from "react";
 import "./Logout.css";
+import API_URL from "../config";
 
 const Logout = ({ isOpen, onClose, user }) => {
   console.log("Logout component - isOpen:", isOpen);
@@ -7,13 +8,13 @@ const Logout = ({ isOpen, onClose, user }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3002/logout", {
+      const response = await fetch(`${API_URL}/logout`, {
         method: "POST",
         credentials: "include",
       });
       const data = await response.json();
       if (data.success) {
-        window.location.href = "http://localhost:3000/login";
+        window.location.href = "/login";
       }
     } catch (error) {
       console.error("Logout error:", error);

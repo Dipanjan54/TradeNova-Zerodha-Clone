@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 import GeneralContext from "./GeneralContext";
+import API_URL from "../config";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
@@ -13,7 +14,7 @@ const Holdings = () => {
     const fetchHoldings = () => {
       setLoading(true);
       axios
-        .get("http://localhost:3002/allHoldings", { withCredentials: true })
+        .get(`${API_URL}/allHoldings`, { withCredentials: true })
         .then((res) => {
           console.log("Holdings data fetched:", res.data);
           setAllHoldings(res.data);

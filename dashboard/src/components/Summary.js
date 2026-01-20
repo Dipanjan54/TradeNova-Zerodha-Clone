@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import API_URL from "../config";
 
 const Summary = () => {
   const [username, setUsername] = useState("User");
@@ -8,7 +9,7 @@ const Summary = () => {
       try {
         console.log("Fetching user data...");
         
-        const response = await fetch("http://localhost:3002/user", {
+        const response = await fetch(`${API_URL}/user`, {
           method: "GET",
           credentials: "include",
         });

@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnutChart";
+import API_URL from "../config";
 
 const labels = watchlist.map((subArray) => subArray["name"]);
 
@@ -19,7 +20,7 @@ const WatchList = () => {
   useEffect(() => {
     // Fetch holdings to know available quantities
     axios
-      .get("http://localhost:3002/allHoldings", { withCredentials: true })
+      .get(`${API_URL}/allHoldings`, { withCredentials: true })
       .then((res) => {
         setAllHoldings(res.data);
       })

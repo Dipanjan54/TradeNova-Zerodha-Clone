@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logout from "./Logout";
+import API_URL from "../config";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
@@ -13,7 +14,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3002/user", {
+        const response = await fetch(`${API_URL}/user`, {
           credentials: "include",
         });
         const data = await response.json();
