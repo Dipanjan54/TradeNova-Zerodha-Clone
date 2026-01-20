@@ -21,13 +21,15 @@ const LocalStrategy = require("passport-local");
 const User = require("./model/UserModel.js");
 const userRouter = require("./routes/user.js");
 const MongoStore = require("connect-mongo").default;
+
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      process.env.FRONTEND_URL || "*",
-    ],
+      process.env.FRONTEND_URL,
+      process.env.DASHBOARD_URL,
+    ].filter(Boolean),
     credentials: true,
   }),
 );
@@ -53,8 +55,8 @@ const sessionOptions = {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "none",
+    secure: true,
   },
 };
 
