@@ -3,6 +3,7 @@ import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import "./BuyActionWindow.css";
 import API_URL from "../config";
+import { axiosConfig } from "../utils/api";
 
 const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
@@ -31,7 +32,7 @@ const BuyActionWindow = ({ uid }) => {
           price: parseFloat(stockPrice),
           mode: "BUY",
         },
-        { withCredentials: true },
+        axiosConfig(),
       );
 
       console.log("Buy order placed successfully");

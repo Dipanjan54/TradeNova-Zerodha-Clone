@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logout from "./Logout";
-import API_URL from "../config";
+import { fetchWithAuth } from "../utils/api";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
@@ -14,17 +14,27 @@ const Menu = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${API_URL}/user`, {
-          credentials: "include",
+        // First check localStorage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+
+        // Then verify with backend
+        const response = await fetchWithAuth("/user", {
+          method: "GET",
         });
+
         const data = await response.json();
         if (data.success) {
           setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
         }
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
+
     fetchUser();
   }, []);
 
@@ -53,7 +63,7 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
-      <img src="logo (1).png" style={{ width: "50px" }} alt="Logo" />
+      <img src="logo.png" style={{ width: "50px" }} alt="Logo" />
       <div className="menus">
         <ul>
           <li>
@@ -115,27 +125,25 @@ const Menu = () => {
             <Link
               style={{ textDecoration: "none" }}
               to="/apps"
-              onClick={() => handleMenuClick(6)}
+              onClick={() => handleMenuClick(5)}
             >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
+              <p className={selectedMenu === 5 ? activeMenuClass : menuClass}>
                 Apps
               </p>
             </Link>
           </li>
         </ul>
         <hr />
-        <div className="profile-section">
-          <div className="profile" onClick={handleProfileClick}>
-            <div className="avatar">{getInitials(user.username)}</div>
-            <p className="username">{user.username}</p>
-          </div>
-          <Logout
-            isOpen={isProfileDropdownOpen}
-            onClose={() => setIsProfileDropdownOpen(false)}
-            user={user}
-          />
+        <div className="profile" onClick={handleProfileClick}>
+          <div className="avatar">{getInitials(user.username)}</div>
+          <p className="username">{user.username}</p>
         </div>
       </div>
+      <Logout
+        isOpen={isProfileDropdownOpen}
+        onClose={() => setIsProfileDropdownOpen(false)}
+        user={user}
+      />
     </div>
   );
 };

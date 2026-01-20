@@ -1,18 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "../config";
-
-// import { positions } from "../data/data";
+import { axiosConfig } from "../utils/api";
 
 const Positions = () => {
+  const [allPositions, setAllPositions] = useState([]);
 
-  const [allPositions,setAllPositions] = useState([]);
-
-  useEffect(()=>{
-    axios.get(`${API_URL}/allPositions`, { withCredentials: true }).then((res)=>{
+  useEffect(() => {
+    axios.get(`${API_URL}/allPositions`, axiosConfig()).then((res) => {
       setAllPositions(res.data);
-    })
-  },[]);
+    });
+  }, []);
+
   return (
     <>
       <h3 className="title">Positions ({allPositions.length})</h3>

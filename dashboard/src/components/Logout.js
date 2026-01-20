@@ -13,11 +13,19 @@ const Logout = ({ isOpen, onClose, user }) => {
         credentials: "include",
       });
       const data = await response.json();
+
       if (data.success) {
+        // Clear JWT token from localStorage
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
         window.location.href = "/login";
       }
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if request fails, clear local storage
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
     }
   };
 

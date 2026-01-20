@@ -45,6 +45,10 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success) {
+        // Store JWT token in localStorage
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setFlashMessage({ type: "success", message: data.message });
         setTimeout(() => {
           navigate("/");

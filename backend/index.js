@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const flash = require("connect-flash");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
 
 const { HoldingsModel } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
@@ -34,8 +36,7 @@ app.use(
   }),
 );
 
-app.use(bodyParser.json()); 
-
+app.use(bodyParser.json());
 
 const store = new MongoStore({
   mongoUrl: uri,
@@ -71,11 +72,23 @@ app.use("/", userRouter);
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+
 const isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
+  const token = req.headers.authorization?.split(" ")[1]; // Bearer TOKEN
+
+  if (!token) {
     return res.status(401).json({ message: "Please login first" });
   }
-  next();
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    req.username = decoded.username;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
 };
 
 app.get("/allHoldings", isLoggedIn, async (req, res) => {

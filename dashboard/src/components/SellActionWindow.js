@@ -3,6 +3,7 @@ import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import "./SellActionWindow.css";
 import API_URL from "../config";
+import { axiosConfig } from "../utils/api";
 
 const SellActionWindow = ({ uid, availableQty }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
@@ -72,7 +73,7 @@ const SellActionWindow = ({ uid, availableQty }) => {
           price: parseFloat(stockPrice),
           mode: "SELL",
         },
-        { withCredentials: true },
+        axiosConfig(),
       );
 
       console.log("Sell order placed successfully");

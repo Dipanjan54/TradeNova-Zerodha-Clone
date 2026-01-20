@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import API_URL from "../config";
+import { fetchWithAuth } from "../utils/api";
 
 const Summary = () => {
   const [username, setUsername] = useState("User");
@@ -7,21 +7,27 @@ const Summary = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        // First try to get from localStorage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          setUsername(user.username);
+        }
+
+        // Then verify with backend
         console.log("Fetching user data...");
-        
-        const response = await fetch(`${API_URL}/user`, {
+        const response = await fetchWithAuth("/user", {
           method: "GET",
-          credentials: "include",
         });
 
         console.log("Response status:", response.status);
-        
         const data = await response.json();
         console.log("Response data:", data);
 
         if (response.ok && data.success) {
           console.log("Setting username to:", data.user.username);
           setUsername(data.user.username);
+          localStorage.setItem("user", JSON.stringify(data.user));
         } else {
           console.log("User not authenticated or error");
         }
@@ -87,7 +93,6 @@ const Summary = () => {
             </p>
           </div>
         </div>
-        <hr className="divider" />
       </div>
     </>
   );

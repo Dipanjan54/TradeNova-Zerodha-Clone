@@ -3,6 +3,7 @@ import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 import GeneralContext from "./GeneralContext";
 import API_URL from "../config";
+import { axiosConfig } from "../utils/api";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
@@ -14,7 +15,7 @@ const Holdings = () => {
     const fetchHoldings = () => {
       setLoading(true);
       axios
-        .get(`${API_URL}/allHoldings`, { withCredentials: true })
+        .get(`${API_URL}/allHoldings`, axiosConfig())
         .then((res) => {
           console.log("Holdings data fetched:", res.data);
           setAllHoldings(res.data);
@@ -49,7 +50,6 @@ const Holdings = () => {
   return (
     <>
       <h3 className="title">Holdings ({allHoldings.length})</h3>
-
       {allHoldings.length === 0 ? (
         <div className="no-holdings">
           <p>You don't have any holdings yet</p>
@@ -78,7 +78,7 @@ const Holdings = () => {
                   const dayClass = stock.isLoss ? "loss" : "profit";
 
                   return (
-                    <tr key={stock._id || index}>
+                    <tr key={index}>
                       <td>{stock.name}</td>
                       <td>{stock.qty}</td>
                       <td>{stock.avg.toFixed(2)}</td>
@@ -98,24 +98,9 @@ const Holdings = () => {
 
           <div className="row">
             <div className="col">
-              <h5>
-                29,875.<span>55</span>{" "}
-              </h5>
-              <p>Total investment</p>
-            </div>
-            <div className="col">
-              <h5>
-                31,428.<span>95</span>{" "}
-              </h5>
-              <p>Current value</p>
-            </div>
-            <div className="col">
-              <h5>1,553.40 (+5.20%)</h5>
-              <p>P&L</p>
+              <VerticalGraph data={data} />
             </div>
           </div>
-
-          {allHoldings.length > 0 && <VerticalGraph data={data} />}
         </>
       )}
     </>

@@ -43,9 +43,14 @@ export default function Signup() {
       const data = await response.json();
 
       if (data.success) {
+        // Store JWT token in localStorage
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setFlashMessage({ type: "success", message: data.message });
         setTimeout(() => {
-          window.location.href = process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
+          window.location.href =
+            process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
         }, 2000);
       } else {
         setFlashMessage({ type: "error", message: data.message });
