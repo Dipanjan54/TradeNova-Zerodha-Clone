@@ -20,21 +20,32 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./model/UserModel.js");
 const userRouter = require("./routes/user.js");
-
+const MongoStore = require("connect-mongo").default;
 app.use(
   cors({
     origin: [
-      "http://localhost:3000", 
+      "http://localhost:3000",
       "http://localhost:3001",
-      process.env.FRONTEND_URL || "*"
+      process.env.FRONTEND_URL || "*",
     ],
     credentials: true,
   }),
 );
 
-app.use(bodyParser.json()); // ← ADD THIS LINE - VERY IMPORTANT!
+app.use(bodyParser.json()); 
+
+
+const store = new MongoStore({
+  mongoUrl: uri,
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
 
 const sessionOptions = {
+  store,
   secret: "mysupersecretcode",
   resave: false,
   saveUninitialized: true,
