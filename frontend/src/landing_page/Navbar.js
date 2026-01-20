@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API_URL from "../config";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -9,7 +10,7 @@ function Navbar() {
     // Check if user is logged in
     const checkAuth = async () => {
       try {
-        const response = await fetch("http://localhost:3002/user", {
+        const response = await fetch(`${API_URL}/user`, {
           credentials: "include",
         });
         const data = await response.json();
@@ -26,7 +27,7 @@ function Navbar() {
 
   const handleKiteClick = () => {
     if (isLoggedIn) {
-      window.location.href = "http://localhost:3000";
+      window.location.href = process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
     } else {
       window.location.href = "/signup";
     }

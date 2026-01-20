@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Signup.css";
+import API_URL from "../../config";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +32,7 @@ export default function Signup() {
     setValidated(true);
 
     try {
-      const response = await fetch("http://localhost:3002/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +45,7 @@ export default function Signup() {
       if (data.success) {
         setFlashMessage({ type: "success", message: data.message });
         setTimeout(() => {
-          window.location.href = "http://localhost:3000";
+          window.location.href = process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
         }, 2000);
       } else {
         setFlashMessage({ type: "error", message: data.message });

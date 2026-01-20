@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "connect-mongo": "^6.0.0",
+    "connect-mongoose": "^0.0.2"
+  }
+}
