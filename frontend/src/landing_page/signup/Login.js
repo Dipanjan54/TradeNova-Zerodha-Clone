@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Signup.css"; 
+import "./Signup.css";
 import API_URL from "../../config";
 
 export default function Login() {
@@ -32,6 +32,7 @@ export default function Login() {
 
     try {
       const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -44,7 +45,8 @@ export default function Login() {
         setFlashMessage({ type: "success", message: data.message });
         setTimeout(() => {
           // Redirect to dashboard
-          window.location.href = process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
+          window.location.href =
+            process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000";
         }, 1000);
       } else {
         setFlashMessage({ type: "error", message: data.message });
