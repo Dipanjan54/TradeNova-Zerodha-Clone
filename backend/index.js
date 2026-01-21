@@ -119,7 +119,7 @@ app.post("/newOrder", isLoggedIn, async (req, res) => {
       qty,
       price: parseFloat(price),
       mode,
-      user: req.userId,
+      user: new mongoose.Types.ObjectId(req.userId),
     });
 
     await newOrder.save();
@@ -129,7 +129,7 @@ app.post("/newOrder", isLoggedIn, async (req, res) => {
       // Find existing holding for this stock
       let holding = await HoldingsModel.findOne({
         name,
-        user: req.userId,
+        user: new mongoose.Types.ObjectId(req.userId),
       });
 
       if (holding) {
@@ -150,7 +150,7 @@ app.post("/newOrder", isLoggedIn, async (req, res) => {
           net: "+0.00%",
           day: "+0.00%",
           isLoss: false,
-          user: req.userId,
+          user: new mongoose.Types.ObjectId(req.userId),
         });
         await newHolding.save();
       }
@@ -158,7 +158,7 @@ app.post("/newOrder", isLoggedIn, async (req, res) => {
       // Find existing holding
       let holding = await HoldingsModel.findOne({
         name,
-        user: req.userId,
+        user: new mongoose.Types.ObjectId(req.userId),
       });
 
       if (!holding) {
