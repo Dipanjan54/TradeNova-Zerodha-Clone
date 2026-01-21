@@ -11,6 +11,7 @@ import {
 import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnutChart";
 import API_URL from "../config";
+import { axiosConfig } from "../utils/api";
 
 const labels = watchlist.map((subArray) => subArray["name"]);
 
@@ -20,7 +21,7 @@ const WatchList = () => {
   useEffect(() => {
     // Fetch holdings to know available quantities
     axios
-      .get(`${API_URL}/allHoldings`, { withCredentials: true })
+      .get(`${API_URL}/allHoldings`, axiosConfig())
       .then((res) => {
         setAllHoldings(res.data);
       })
