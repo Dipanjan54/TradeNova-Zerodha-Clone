@@ -72,8 +72,6 @@ app.use("/", userRouter);
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-
 const isLoggedIn = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Bearer TOKEN
 
@@ -92,47 +90,123 @@ const isLoggedIn = (req, res, next) => {
 };
 
 app.get("/allHoldings", isLoggedIn, async (req, res) => {
-  let allHoldings = await HoldingsModel.find({});
-  res.json(allHoldings);
+  try {
+    let allHoldings = await HoldingsModel.find({ user: req.userId });
+    res.json(allHoldings);
+  } catch (error) {
+    console.error("Error fetching holdings:", error);
+    res.status(500).json({ message: "Error fetching holdings" });
+  }
 });
 
 app.get("/allPositions", isLoggedIn, async (req, res) => {
-  let allPositions = await PositionsModel.find({});
-  res.json(allPositions);
+  try {
+    let allPositions = await PositionsModel.find({ user: req.userId });
+    res.json(allPositions);
+  } catch (error) {
+    console.error("Error fetching positions:", error);
+    res.status(500).json({ message: "Error fetching positions" });
+  }
 });
 
 app.post("/newOrder", isLoggedIn, async (req, res) => {
-  let newOrder = new OrdersModel({
-    name: req.body.name,
-    qty: req.body.qty,
-    price: req.body.price,
-    mode: req.body.mode,
-  });
+  try {
+    const { name, qty, price, mode } = req.body;
 
-  newOrder.save();
+    // Save the order
+    let newOrder = new OrdersModel({
+      name,
+      qty,
+      price: parseFloat(price),
+      mode,
+      user: req.userId,
+    });
 
-  res.send("Order saved!");
+    await newOrder.save();
+
+    // Update holdings based on BUY or SELL
+    if (mode === "BUY") {
+      // Find existing holding for this stock
+      let holding = await HoldingsModel.findOne({
+        name,
+        user: req.userId,
+      });
+
+      if (holding) {
+        // Update existing holding
+        const totalQty = holding.qty + qty;
+        const totalCost = holding.avg * holding.qty + parseFloat(price) * qty;
+        holding.qty = totalQty;
+        holding.avg = totalCost / totalQty;
+        holding.price = parseFloat(price); // Update to latest price
+        await holding.save();
+      } else {
+        // Create new holding
+        let newHolding = new HoldingsModel({
+          name,
+          qty,
+          avg: parseFloat(price),
+          price: parseFloat(price),
+          net: "+0.00%",
+          day: "+0.00%",
+          isLoss: false,
+          user: req.userId,
+        });
+        await newHolding.save();
+      }
+    } else if (mode === "SELL") {
+      // Find existing holding
+      let holding = await HoldingsModel.findOne({
+        name,
+        user: req.userId,
+      });
+
+      if (!holding) {
+        return res.status(400).json({
+          success: false,
+          message: "You don't own this stock",
+        });
+      }
+
+      if (holding.qty < qty) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient quantity. You only have ${holding.qty} shares`,
+        });
+      }
+
+      // Reduce quantity
+      holding.qty -= qty;
+
+      if (holding.qty === 0) {
+        // Remove holding if quantity is 0
+        await HoldingsModel.deleteOne({ _id: holding._id });
+      } else {
+        await holding.save();
+      }
+    }
+
+    res.json({ success: true, message: "Order saved and holdings updated!" });
+  } catch (error) {
+    console.error("Error saving order:", error);
+    res.status(500).json({ success: false, message: "Failed to save order" });
+  }
 });
 
 app.get("/allOrders", isLoggedIn, async (req, res) => {
-  let allOrders = await OrdersModel.find({});
-  res.json(allOrders);
+  try {
+    let allOrders = await OrdersModel.find({ user: req.userId });
+    res.json(allOrders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Error fetching orders" });
+  }
 });
 
 app.get("/deleteuser", async (req, res) => {
   await User.deleteOne({ username: "test-student" });
   res.send("User deleted!");
 });
-
-// app.get("/demouser", async (req, res) => {
-//   let fakeUser = new User({
-//     email: "student@gmail.com",
-//     username: "test-student",
-//   });
-//   let registeredUser = await User.register(fakeUser, "helloWorld");
-//   res.send(registeredUser);
-//   console.log(registeredUser);
-// });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
