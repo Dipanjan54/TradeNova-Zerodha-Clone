@@ -96,11 +96,7 @@ const Holdings = () => {
             </table>
           </div>
 
-          <div className="row">
-            <div className="col">
-              <VerticalGraph data={data} />
-            </div>
-          </div>
+          <VerticalGraph data={data} />
         </>
       )}
     </>

@@ -91,7 +91,9 @@ const isLoggedIn = (req, res, next) => {
 
 app.get("/allHoldings", isLoggedIn, async (req, res) => {
   try {
-    let allHoldings = await HoldingsModel.find({ user: req.userId });
+    let allHoldings = await HoldingsModel.find({
+      user: new mongoose.Types.ObjectId(req.userId),
+    });
     res.json(allHoldings);
   } catch (error) {
     console.error("Error fetching holdings:", error);
@@ -101,7 +103,9 @@ app.get("/allHoldings", isLoggedIn, async (req, res) => {
 
 app.get("/allPositions", isLoggedIn, async (req, res) => {
   try {
-    let allPositions = await PositionsModel.find({ user: req.userId });
+    let allPositions = await PositionsModel.find({
+      user: new mongoose.Types.ObjectId(req.userId),
+    });
     res.json(allPositions);
   } catch (error) {
     console.error("Error fetching positions:", error);
@@ -195,7 +199,9 @@ app.post("/newOrder", isLoggedIn, async (req, res) => {
 
 app.get("/allOrders", isLoggedIn, async (req, res) => {
   try {
-    let allOrders = await OrdersModel.find({ user: req.userId });
+    let allOrders = await OrdersModel.find({
+      user: new mongoose.Types.ObjectId(req.userId),
+    });
     res.json(allOrders);
   } catch (error) {
     console.error("Error fetching orders:", error);

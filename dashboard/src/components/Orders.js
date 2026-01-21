@@ -37,13 +37,53 @@ const Orders = () => {
 
   return (
     <div className="orders">
-      <div className="no-orders">
-        <p>You haven't placed any orders today</p>
+      {allOrders.length === 0 ? (
+        <div className="no-orders">
+          <p>You haven't placed any orders yet</p>
+          <Link to={"/"} className="btn">
+            Get started
+          </Link>
+        </div>
+      ) : (
+        <>
+          <h3 className="title">Orders ({allOrders.length})</h3>
+          <div className="order-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Stock</th>
+                  <th>Type</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total Value</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allOrders.map((order, index) => {
+                  const totalValue = order.qty * order.price;
+                  const orderTime = order.createdAt
+                    ? new Date(order.createdAt).toLocaleString()
+                    : "N/A";
 
-        <Link to={"/"} className="btn">
-          Get started
-        </Link>
-      </div>
+                  return (
+                    <tr key={index}>
+                      <td>{order.name}</td>
+                      <td className={order.mode === "BUY" ? "profit" : "loss"}>
+                        {order.mode}
+                      </td>
+                      <td>{order.qty}</td>
+                      <td>₹{order.price.toFixed(2)}</td>
+                      <td>₹{totalValue.toFixed(2)}</td>
+                      <td>{orderTime}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   );
 };
